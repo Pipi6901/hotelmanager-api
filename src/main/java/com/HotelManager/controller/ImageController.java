@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 @RequestMapping("/img")
 public class ImageController {
 
-    private final String uploadImg = "D:/Курсачи Spring REST/папки для фоток проектов/HotelManager_images/";
+    private final String uploadImg = "D:/Courses_Spring_REST/FolderForProjectsImages/HotelManager_images/";
 
     @GetMapping("/hotel/{filename:.+}")
     @ResponseBody

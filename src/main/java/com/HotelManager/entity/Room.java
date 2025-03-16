@@ -1,5 +1,7 @@
 package com.HotelManager.entity;
 
+import com.HotelManager.entity.enums.Beds;
+import com.HotelManager.entity.enums.Type;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,10 +31,35 @@ public class Room {
     private int price;
     private String photo;
     private boolean free;
+    private int days = 0;
 
+    @Enumerated(EnumType.STRING)
+    private Type type;
+
+    @Enumerated(EnumType.STRING)
+    private Beds beds;
+
+    private int number;
     private String description;
+    private int floor;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
+
+    @Override
+    public String toString(){
+        return "Room{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", free='" + free + '\'' +
+                ", days=" + days +
+                ", type=" + type + '\'' +
+                ", beds=" + beds +
+                ", number=" + number + '\'' +
+                ", description=" + description +
+                ", floor=" + floor + '\'' +
+                '}';
+    }
 }
