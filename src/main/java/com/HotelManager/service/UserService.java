@@ -42,7 +42,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(registrationUserDto.getPassword()));
         user.setName(registrationUserDto.getName());
         user.setPhone(registrationUserDto.getPhone());
-        user.setRoles(List.of(roleService.getUserRole()));
+        user.setRoles(List.of(roleService.getRole_User()));
         return userRepository.save(user);
     }
 

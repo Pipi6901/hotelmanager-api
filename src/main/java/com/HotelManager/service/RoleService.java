@@ -16,8 +16,18 @@ import java.util.stream.Collectors;
 public class RoleService {
     private final RoleRepository roleRepository;
 
-    public Role getUserRole(){
-        return roleRepository.findByName("ROLE_USER")
-                .orElseThrow(() -> new NoSuchElementException("Role not found in database"));
+    public Role getRole_User(){
+        return getUserRole("ROLE_USER");
     }
+
+    public Role getRole_Manager(){
+        return getUserRole("ROLE_MANAGER");
+    }
+
+    public Role getUserRole(String roleName){
+        return roleRepository.findByName(roleName)
+                .orElseThrow(() -> new NoSuchElementException("Role '" + roleName + "' not found in database"));
+    }
+
+
 }
