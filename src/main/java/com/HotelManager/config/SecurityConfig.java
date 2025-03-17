@@ -63,9 +63,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth", "/registration").permitAll()
                         .requestMatchers(
-                                "/automobiles",
-                                "/automobiles/{id}",
-                                "/automobiles/searchAuto",
+                                "/rooms",
+                                "/rooms/{id}",
+                                "/rooms/searchAuto",
                                 "/models",
                                 "/feedback",
                                 "/comments/{publicationId}",
@@ -75,7 +75,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers("/img/**").permitAll()
                         .requestMatchers(
-                                "/automobiles/**",
+                                "/rooms/**",
                                 "/application/**",
                                 "/models/**",
                                 "/profile/**",

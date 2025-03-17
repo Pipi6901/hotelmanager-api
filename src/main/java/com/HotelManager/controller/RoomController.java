@@ -1,8 +1,10 @@
 package com.HotelManager.controller;
 
 import com.HotelManager.DTO.RoomDTO;
+import com.HotelManager.entity.Reservation;
 import com.HotelManager.entity.Room;
 import com.HotelManager.entity.User;
+import com.HotelManager.repo.ReservationRepository;
 import com.HotelManager.repo.RoomRepository;
 import com.HotelManager.repo.UserRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -45,6 +47,7 @@ public class RoomController {
 
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
+    private final ReservationRepository reservationRepository;
 
     @Value("${upload.img}")
     protected String uploadImg;
@@ -101,6 +104,28 @@ public class RoomController {
 
         return ResponseEntity.ok(roomDTO);
     }
+
+
+//    @PostMapping("/{id}/application") // http://localhost:8080/automobiles/1/application
+//    public ResponseEntity<?> createReservation(@PathVariable Long id) {
+//        String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+//        log.info("Current user: {}", currentUser);
+//
+//        Room room = roomRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Номер не найден"));
+//
+//
+//        Reservation reservation = Reservation.builder()
+//                .price(automobile.getPrice())
+//                .buyer(currentUser)
+//                .titleAuto(automobile.getName())
+//                .status(ApplicationStatus.WAITING)
+//                .automobile(automobile)
+//                .build();
+//
+//        reservationRepository.save(reservation);
+//        return ResponseEntity.ok(application);
+//    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/add", consumes = {"multipart/form-data"})
