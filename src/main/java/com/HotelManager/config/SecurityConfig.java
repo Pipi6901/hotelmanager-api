@@ -68,7 +68,7 @@ public class SecurityConfig {
                                 "/rooms/searchAuto",
                                 "/models",
                                 "/feedback",
-                                "/comments/{publicationId}",
+                                "/comments/{roomId}",
                                 "/publications",
                                 "/publications/search",
                                 "/publications/{id}"
