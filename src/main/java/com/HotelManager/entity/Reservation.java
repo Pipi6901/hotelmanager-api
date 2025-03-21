@@ -1,18 +1,27 @@
 package com.HotelManager.entity;
 
+import com.HotelManager.entity.enums.Beds;
+import com.HotelManager.entity.enums.Type;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.HotelManager.entity.enums.ReservationStatus;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -28,6 +37,24 @@ public class Reservation {
     private Long id;
 
     private String name;
+
+    private int price;
+    private String photo;
+    private boolean free;
+    private int days;
+
+    @Enumerated(EnumType.STRING)
+    private Type type;
+
+    @Enumerated(EnumType.STRING)
+    private Beds beds;
+
+    private int number;
+    private String description;
+    private int floor;
+
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
 
     @ManyToOne
     @JsonBackReference

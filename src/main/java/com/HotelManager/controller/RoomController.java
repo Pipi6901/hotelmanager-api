@@ -1,9 +1,11 @@
 package com.HotelManager.controller;
 
+import com.HotelManager.DTO.ReservationDTO;
 import com.HotelManager.DTO.RoomDTO;
 import com.HotelManager.entity.Reservation;
 import com.HotelManager.entity.Room;
 import com.HotelManager.entity.User;
+import com.HotelManager.entity.enums.ReservationStatus;
 import com.HotelManager.repo.ReservationRepository;
 import com.HotelManager.repo.RoomRepository;
 import com.HotelManager.repo.UserRepository;
@@ -105,6 +107,58 @@ public class RoomController {
         return ResponseEntity.ok(roomDTO);
     }
 
+    @PostMapping("/{id}/createRent")
+    public ResponseEntity<?> createRent(
+            @PathVariable Long id,
+            @RequestParam int days
+    ) {
+        String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByUsername(currentUser)
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Номер не найден"));
+
+        if (!room.isFree()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Номер уже занят. Бронирование невозможно.");
+        }
+
+        int totalCost = room.getPrice() * days;
+
+        if (user.getBalance() < totalCost) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Недостаточно средств на балансе для бронирования.");
+        }
+
+        Reservation reservation = Reservation.builder()
+                .name(room.getName())
+                .owner(currentUser)
+                .photo(room.getPhoto())
+                .description(room.getDescription())
+                .status(ReservationStatus.WAITING)
+                .number(room.getNumber())
+                .price(room.getPrice())
+                .days(days)
+                .type(room.getType())
+                .beds(room.getBeds())
+                .floor(room.getFloor())
+                .room(room)
+                .build();
+
+        room.setFree(false);
+        roomRepository.save(room);
+
+        reservationRepository.save(reservation);
+
+        user.setBalance(user.getBalance() - totalCost);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(reservation);
+    }
 
 //    @PostMapping("/{id}/application") // http://localhost:8080/automobiles/1/application
 //    public ResponseEntity<?> createReservation(@PathVariable Long id) {

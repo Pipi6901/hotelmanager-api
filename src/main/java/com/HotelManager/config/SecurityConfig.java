@@ -76,7 +76,7 @@ public class SecurityConfig {
                         .requestMatchers("/img/**").permitAll()
                         .requestMatchers(
                                 "/rooms/**",
-                                "/application/**",
+                                "/reservations/**",
                                 "/models/**",
                                 "/profile/**",
                                 "/stats/**",

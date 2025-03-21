@@ -88,6 +88,7 @@ public class ProfileController {
                 .orElseThrow(()-> new RuntimeException("Пользователь не найден"));
 
         user.setBalance(balance);
+        userRepository.save(user);
 
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());

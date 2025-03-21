@@ -19,7 +19,6 @@ public class UserDTO {
     private int balance;
     private List<String> roles;
 
-
     public UserDTO() {
 
     }
