@@ -42,10 +42,6 @@ public class UserController {
             userDTO.setName(user.getName());
             userDTO.setPhone(user.getPhone());
 
-            if (user.getPhoto() != null && !user.getPhoto().isEmpty()) {
-                userDTO.setPhoto("http://localhost:8080/img/hotel/" + user.getPhoto());
-            }
-
             List<String> roles = user.getRoles().stream()
                     .map(Role::getName)
                     .collect(Collectors.toList());
@@ -66,7 +62,6 @@ public class UserController {
                 "id", user.getId(),
                 "username", user.getUsername(),
                 "email", user.getEmail(),
-                "photo", "http://localhost:8080/img/hotel/" + user.getPhoto(),
                 "name", user.getName(),
                 "phone", user.getPhone(),
                 "roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList())
@@ -86,10 +81,6 @@ public class UserController {
             userDTO.setEmail(user.getEmail());
             userDTO.setName(user.getName());
             userDTO.setPhone(user.getPhone());
-
-            if (user.getPhoto() != null && !user.getPhoto().isEmpty()) {
-                userDTO.setPhoto("http://localhost:8080/img/hotel/" + user.getPhoto());
-            }
 
             List<String> roles = user.getRoles().stream()
                     .map(Role::getName)
@@ -115,18 +106,19 @@ public class UserController {
 
         userRepository.save(user);
 
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setName(user.getName());
+        userDTO.setPhone(user.getPhone());
+
         List<String> roles = user.getRoles().stream()
                 .map(Role::getName)
                 .collect(Collectors.toList());
+        userDTO.setRoles(roles);
 
-        return ResponseEntity.ok(new UserDTO(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getName(),
-                user.getPhone(),
-                roles
-        ));
+        return ResponseEntity.ok(userDTO);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
