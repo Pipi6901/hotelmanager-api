@@ -66,7 +66,7 @@ public class AuthService {
         }
         User user = userService.createNewUser(registrationUserDTO);
 
-        return ResponseEntity.ok(new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getName(), user.getPhone()));
+        return ResponseEntity.ok(new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getName(), user.getPhone(), user.getBalance()));
     }
 
     public UserDetails loadUserByUsername(String username) {

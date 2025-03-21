@@ -42,6 +42,9 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
+    @Column(name = "balance", columnDefinition = "0")
+    private int balance;
+
     @ManyToMany
     @JoinTable(
             name = "users_roles",

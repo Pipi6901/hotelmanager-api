@@ -16,18 +16,21 @@ public class UserDTO {
     private String email;
     private String name;
     private String phone;
+    private int balance;
     private List<String> roles;
+
 
     public UserDTO() {
 
     }
 
-    public UserDTO(Long id, String username, String email, String name, String phone) {
+    public UserDTO(Long id, String username, String email, String name, String phone, int balance) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.name = name;
         this.phone = phone;
+        this.balance = balance;
     }
 
 

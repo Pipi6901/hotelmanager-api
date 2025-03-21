@@ -41,6 +41,7 @@ public class UserController {
             userDTO.setEmail(user.getEmail());
             userDTO.setName(user.getName());
             userDTO.setPhone(user.getPhone());
+            userDTO.setBalance(user.getBalance());
 
             List<String> roles = user.getRoles().stream()
                     .map(Role::getName)
@@ -64,6 +65,7 @@ public class UserController {
                 "email", user.getEmail(),
                 "name", user.getName(),
                 "phone", user.getPhone(),
+                "balance", user.getBalance(),
                 "roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList())
         ));
     }
@@ -81,6 +83,7 @@ public class UserController {
             userDTO.setEmail(user.getEmail());
             userDTO.setName(user.getName());
             userDTO.setPhone(user.getPhone());
+            userDTO.setBalance(user.getBalance());
 
             List<String> roles = user.getRoles().stream()
                     .map(Role::getName)
@@ -112,6 +115,7 @@ public class UserController {
         userDTO.setEmail(user.getEmail());
         userDTO.setName(user.getName());
         userDTO.setPhone(user.getPhone());
+        userDTO.setBalance(user.getBalance());
 
         List<String> roles = user.getRoles().stream()
                 .map(Role::getName)
@@ -139,6 +143,7 @@ public class UserController {
                 user.getUsername(),
                 user.getEmail(),
                 user.getPhone(),
+                user.getBalance(),
                 roles
         ));
     }

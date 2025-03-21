@@ -14,11 +14,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -47,6 +50,7 @@ public class ProfileController {
                 "email", user.getEmail(),
                 "name", user.getName(),
                 "phone", user.getPhone(),
+                "balance", user.getBalance(),
                 "roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList())
         ));
     }
@@ -75,5 +79,30 @@ public class ProfileController {
         return ResponseEntity.ok(user);
     }
 
+
+    @PutMapping("/topUpBalance")
+    public ResponseEntity<?> topUpBalance(@RequestParam int balance){
+        String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByUsername(currentUser)
+                .orElseThrow(()-> new RuntimeException("Пользователь не найден"));
+
+        user.setBalance(balance);
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setName(user.getName());
+        userDTO.setPhone(user.getPhone());
+        userDTO.setBalance(user.getBalance());
+
+        List<String> roles = user.getRoles().stream()
+                .map(Role::getName)
+                .collect(Collectors.toList());
+        userDTO.setRoles(roles);
+
+        return ResponseEntity.ok(userDTO);
+    }
 
 }
