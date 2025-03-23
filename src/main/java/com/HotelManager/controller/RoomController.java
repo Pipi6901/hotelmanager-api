@@ -164,6 +164,7 @@ public class RoomController {
         roomRepository.save(room);
 
         reservationRepository.save(reservation);
+        log.info("Бронирование создано: ID={}, Статус={}", reservation.getId(), reservation.getStatus());
 
         user.setBalance(user.getBalance() - totalCost);
         userRepository.save(user);
