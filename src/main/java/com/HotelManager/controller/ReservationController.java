@@ -65,7 +65,7 @@ public class ReservationController {
                 RoomDTO roomDTO = new RoomDTO();
                 roomDTO.setId(reservation.getId());
                 roomDTO.setName(reservation.getName());
-                roomDTO.setPrice(reservation.getRoom().getPrice());
+                roomDTO.setPrice(reservation.getRoom().getPrice() * reservation.getRoom().getDays());
                 roomDTO.setFree(reservation.getRoom().isFree());
                 roomDTO.setDays(reservation.getRoom().getDays());
                 roomDTO.setType(reservation.getRoom().getType());
@@ -88,11 +88,12 @@ public class ReservationController {
         } else if (roles.contains("ROLE_USER")){
             reservations = reservationRepository.findByOwner(currentUser);
 
+
             List<RoomDTO> roomDTOs = reservations.stream().map(reservation -> {
                 RoomDTO roomDTO = new RoomDTO();
                 roomDTO.setId(reservation.getId());
                 roomDTO.setName(reservation.getName());
-                roomDTO.setPrice(reservation.getRoom().getPrice());
+                roomDTO.setPrice(reservation.getRoom().getPrice() * reservation.getRoom().getDays());
                 roomDTO.setFree(reservation.getRoom().isFree());
                 roomDTO.setDays(reservation.getRoom().getDays());
                 roomDTO.setType(reservation.getRoom().getType());
@@ -191,6 +192,12 @@ public class ReservationController {
 
         reservationRepository.delete(reservation);
 
+        Receipt receipt = receiptRepository.findByReservationId(reservation.getId())
+                .orElseThrow(() -> new RuntimeException("Чек не найден"));
+
+        receipt.setStatus("Cancelled");
+        receiptRepository.save(receipt);
+
         return ResponseEntity.ok(convertToDTO(reservation));
     }
 
@@ -209,7 +216,7 @@ public class ReservationController {
         ReservationResponseDTO dto = new ReservationResponseDTO();
         dto.setId(reservation.getId());
         dto.setName(reservation.getName());
-        dto.setPrice(reservation.getPrice());
+        dto.setPrice(reservation.getPrice() * reservation.getRoom().getDays());
         dto.setStatus(reservation.getStatus().name());
         dto.setOwner(reservation.getOwner());
         dto.setDays(reservation.getDays());

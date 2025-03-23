@@ -7,6 +7,7 @@ import com.HotelManager.entity.Reservation;
 import com.HotelManager.entity.Room;
 import com.HotelManager.entity.User;
 import com.HotelManager.entity.enums.ReservationStatus;
+import com.HotelManager.exception.ErrorResponse;
 import com.HotelManager.repo.ReceiptRepository;
 import com.HotelManager.repo.ReservationRepository;
 import com.HotelManager.repo.RoomRepository;
@@ -127,7 +128,10 @@ public class RoomController {
         if (!room.isFree()) {
             return ResponseEntity
                     .badRequest()
-                    .body("Номер уже занят. Бронирование невозможно.");
+                    .body(new ErrorResponse(
+                            true,
+                            "Номер уже занят, бронирование невозможно"
+                    ));
         }
 
         int totalCost = room.getPrice() * days;
@@ -135,7 +139,10 @@ public class RoomController {
         if (user.getBalance() < totalCost) {
             return ResponseEntity
                     .badRequest()
-                    .body("Недостаточно средств на балансе для бронирования.");
+                    .body(new ErrorResponse(
+                            true,
+                            "Недостаточно средств на балансе для бронирования"
+                    ));
         }
 
         Reservation reservation = Reservation.builder()
