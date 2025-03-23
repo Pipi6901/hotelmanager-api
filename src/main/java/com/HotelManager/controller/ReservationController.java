@@ -184,16 +184,10 @@ public class ReservationController {
         Room room = reservation.getRoom();
         if (room != null) {
             dto.setRoomId(room.getId());
-            dto.setRoomName(room.getName());
             dto.setRoomPrice(room.getPrice());
-            dto.setRoomType(room.getType());
-            dto.setRoomBeds(room.getBeds());
-            dto.setRoomNumber(room.getNumber());
-            dto.setRoomDescription(room.getDescription());
-            dto.setRoomFloor(room.getFloor());
 
             if (room.getPhoto() != null && !room.getPhoto().isEmpty()) {
-                dto.setRoomPhoto("http://localhost:8080/img/hotel/" + room.getPhoto());
+                dto.setPhoto("http://localhost:8080/img/hotel/" + room.getPhoto());
             }
         }
 

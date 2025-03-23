@@ -22,13 +22,8 @@ public class ReservationResponseDTO {
     private int floor;
 
     private Long roomId;
-    private String roomName;
+
     private int roomPrice;
-    private Type roomType;
-    private Beds roomBeds;
-    private int roomNumber;
-    private String roomDescription;
-    private int roomFloor;
-    private String roomPhoto;
+    private String photo;
     private String receiptStatus;
 }
