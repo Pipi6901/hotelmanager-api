@@ -152,7 +152,7 @@ public class RoomController {
                 .description(room.getDescription())
                 .status(ReservationStatus.WAITING)
                 .number(room.getNumber())
-                .price(room.getPrice())
+                .price(totalCost)
                 .days(days)
                 .type(room.getType())
                 .beds(room.getBeds())

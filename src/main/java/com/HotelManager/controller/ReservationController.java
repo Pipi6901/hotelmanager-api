@@ -169,7 +169,7 @@ public class ReservationController {
         ReservationResponseDTO dto = new ReservationResponseDTO();
         dto.setId(reservation.getId());
         dto.setName(reservation.getName());
-        dto.setPrice(reservation.getPrice() * reservation.getRoom().getDays());
+        dto.setPrice(reservation.getPrice());
         dto.setStatus(reservation.getStatus().name());
         dto.setOwner(reservation.getOwner());
         dto.setDays(reservation.getDays());
