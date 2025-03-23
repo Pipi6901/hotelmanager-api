@@ -174,7 +174,7 @@ public class RoomController {
                 .user(user)
                 .totalAmount(totalCost)
                 .createdAt(LocalDateTime.now())
-                .status("Paid")
+                .status("Оплачено")
                 .build();
 
         receiptRepository.save(receipt);

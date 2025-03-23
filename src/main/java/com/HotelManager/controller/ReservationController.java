@@ -13,6 +13,7 @@ import com.HotelManager.repo.ReceiptRepository;
 import com.HotelManager.repo.ReservationRepository;
 import com.HotelManager.repo.RoomRepository;
 import com.HotelManager.repo.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -113,7 +114,7 @@ public class ReservationController {
         Receipt receipt = receiptRepository.findByReservationId(reservation.getId())
                 .orElseThrow(() -> new RuntimeException("Чек не найден"));
 
-        receipt.setStatus("Cancelled");
+        receipt.setStatus("Отменен");
         receiptRepository.save(receipt);
 
         return ResponseEntity.ok(convertToDTO(reservation));
@@ -121,6 +122,7 @@ public class ReservationController {
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping("/{id}/cancel") // http://localhost:8080/reservation/1/cancel
+    @Transactional
     public ResponseEntity<?> cancelReservation(@PathVariable Long id) {
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -144,16 +146,10 @@ public class ReservationController {
             roomRepository.save(room);
         }
 
-        reservation.setStatus(ReservationStatus.REJECT);
-        reservationRepository.save(reservation);
+        receiptRepository.deleteByReservationId(id);
+        reservationRepository.deleteById(id);
 
-        Receipt receipt = receiptRepository.findByReservationId(reservation.getId())
-                .orElseThrow(() -> new RuntimeException("Чек не найден"));
-
-        receipt.setStatus("Cancelled");
-        receiptRepository.save(receipt);
-
-        return ResponseEntity.ok(convertToDTO(reservation));
+        return ResponseEntity.ok("Бронь удалена");
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")

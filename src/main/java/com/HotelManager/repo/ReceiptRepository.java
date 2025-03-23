@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface ReceiptRepository extends JpaRepository<Receipt, Long> {
     Optional<Receipt> findByReservationId(Long reservationId);
+
+    void deleteByReservationId(Long reservationId);
 }
