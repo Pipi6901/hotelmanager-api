@@ -73,7 +73,7 @@ public class ReservationController {
         return ResponseEntity.ok(reservationDTOs);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER')")
     @PostMapping("/{id}/confirm") // http://localhost:8080/reservation/1/confirm
     public ResponseEntity<?> confirmReservation(@PathVariable Long id) {
         Reservation reservation = reservationRepository.findById(id)
@@ -85,7 +85,7 @@ public class ReservationController {
         return ResponseEntity.ok(convertToDTO(reservation));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER')")
     @PostMapping("/{id}/reject") // http://localhost:8080/reservation/1/reject
     public ResponseEntity<?> rejectReservation(@PathVariable Long id) {
         Reservation reservation = reservationRepository.findById(id)
@@ -120,7 +120,7 @@ public class ReservationController {
         return ResponseEntity.ok(convertToDTO(reservation));
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER')")
     @PostMapping("/{id}/cancel") // http://localhost:8080/reservation/1/cancel
     @Transactional
     public ResponseEntity<?> cancelReservation(@PathVariable Long id) {
@@ -154,13 +154,15 @@ public class ReservationController {
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @DeleteMapping("/{id}/delete") // http://localhost:8080/reservation/1/delete
+    @Transactional
     public ResponseEntity<?> deleteReservation(@PathVariable Long id) {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Бронирование не найдено"));
 
+        receiptRepository.deleteByReservationId(id);
         reservationRepository.deleteById(id);
 
-        return ResponseEntity.ok(convertToDTO(reservation));
+        return ResponseEntity.ok("Бронь удалена");
     }
 
     private ReservationResponseDTO convertToDTO(Reservation reservation) {

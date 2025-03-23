@@ -37,7 +37,6 @@ public class ProfileController {
     @Value("${upload.img}")
     protected String uploadImg;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(){
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -55,7 +54,6 @@ public class ProfileController {
         ));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PutMapping("/edit")
     public ResponseEntity<?> editProfile(@RequestBody UserDTO userDTO){
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();

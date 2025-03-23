@@ -60,9 +60,8 @@ public class CommentController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    // Удаление комментария (только админ)
     @DeleteMapping("/{commentId}/delete")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
         Comment comment = roomCommentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Комментарий не найден"));

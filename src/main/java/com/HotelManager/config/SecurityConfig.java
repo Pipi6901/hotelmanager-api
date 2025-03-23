@@ -67,13 +67,14 @@ public class SecurityConfig {
                                 "/rooms/{id}",
                                 "/rooms/searchRoom",
                                 "/comments/{roomId}",
-                                "/receipts/**"
+                                "/comments/{roomId}/add",
+                                "/receipts/**",
+                                "/profile/**"
                         ).permitAll()
                         .requestMatchers("/img/**").permitAll()
                         .requestMatchers(
                                 "/rooms/**",
                                 "/reservations/**",
-                                "/profile/**",
                                 "/stats/**",
                                 "/users/**",
                                 "/comments/**",

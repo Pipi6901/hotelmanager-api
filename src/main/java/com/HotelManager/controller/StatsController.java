@@ -9,6 +9,7 @@ import com.HotelManager.repo.ReservationRepository;
 import com.HotelManager.repo.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,7 @@ public class StatsController {
     private final RoomRepository roomRepository;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<StatsDTO> getStatistics() {
         List<Reservation> reservations = reservationRepository.findAll();
 

@@ -252,7 +252,7 @@ public class RoomController {
     }
 
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @PutMapping("/{id}/edit")
     public ResponseEntity<?> updateRoom(
             @PathVariable Long id,
@@ -321,16 +321,15 @@ public class RoomController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<?> deleteRoom(@PathVariable Long id) {
         Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Публикация не найдена"));
+                .orElseThrow(() -> new RuntimeException("Номер не найдена"));
 
         roomRepository.delete(room);
-        return ResponseEntity.ok("Публикация удалена");
+        return ResponseEntity.ok("Номер удален");
     }
-
 
 
     @GetMapping("/searchRoom")
