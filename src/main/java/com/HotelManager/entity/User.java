@@ -53,5 +53,7 @@ public class User {
     )
     private Collection<Role> roles;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Receipt> receipts;
 
 }

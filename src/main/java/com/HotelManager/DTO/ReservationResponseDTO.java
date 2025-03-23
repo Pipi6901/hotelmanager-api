@@ -30,4 +30,5 @@ public class ReservationResponseDTO {
     private String roomDescription;
     private int roomFloor;
     private String roomPhoto;
+    private String receiptStatus;
 }

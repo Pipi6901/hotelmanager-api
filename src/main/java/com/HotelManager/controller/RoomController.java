@@ -2,10 +2,12 @@ package com.HotelManager.controller;
 
 import com.HotelManager.DTO.ReservationDTO;
 import com.HotelManager.DTO.RoomDTO;
+import com.HotelManager.entity.Receipt;
 import com.HotelManager.entity.Reservation;
 import com.HotelManager.entity.Room;
 import com.HotelManager.entity.User;
 import com.HotelManager.entity.enums.ReservationStatus;
+import com.HotelManager.repo.ReceiptRepository;
 import com.HotelManager.repo.ReservationRepository;
 import com.HotelManager.repo.RoomRepository;
 import com.HotelManager.repo.UserRepository;
@@ -34,6 +36,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -50,6 +53,7 @@ public class RoomController {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private final ReservationRepository reservationRepository;
+    private final ReceiptRepository receiptRepository;
 
     @Value("${upload.img}")
     protected String uploadImg;
@@ -156,6 +160,16 @@ public class RoomController {
 
         user.setBalance(user.getBalance() - totalCost);
         userRepository.save(user);
+
+        Receipt receipt = Receipt.builder()
+                .reservation(reservation)
+                .user(user)
+                .totalAmount(totalCost)
+                .createdAt(LocalDateTime.now())
+                .status("Paid")
+                .build();
+
+        receiptRepository.save(receipt);
 
         return ResponseEntity.ok(reservation);
     }

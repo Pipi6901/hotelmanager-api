@@ -65,26 +65,19 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/rooms",
                                 "/rooms/{id}",
-                                "/rooms/searchAuto",
-                                "/models",
-                                "/feedback",
+                                "/rooms/searchRoom",
                                 "/comments/{roomId}",
-                                "/publications",
-                                "/publications/search",
-                                "/publications/{id}"
+                                "/receipts/**"
                         ).permitAll()
                         .requestMatchers("/img/**").permitAll()
                         .requestMatchers(
                                 "/rooms/**",
                                 "/reservations/**",
-                                "/models/**",
                                 "/profile/**",
                                 "/stats/**",
                                 "/users/**",
-                                "/feedback/**",
                                 "/comments/**",
-                                "/publications/**",
-                                "/public-applications/**"
+                                "/receipts/**"
                         ).authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -3,11 +3,13 @@ package com.HotelManager.controller;
 
 import com.HotelManager.DTO.ReservationResponseDTO;
 import com.HotelManager.DTO.RoomDTO;
+import com.HotelManager.entity.Receipt;
 import com.HotelManager.entity.Reservation;
 import com.HotelManager.entity.Room;
 import com.HotelManager.entity.User;
 import com.HotelManager.entity.enums.ReservationStatus;
 import com.HotelManager.exception.ErrorResponse;
+import com.HotelManager.repo.ReceiptRepository;
 import com.HotelManager.repo.ReservationRepository;
 import com.HotelManager.repo.RoomRepository;
 import com.HotelManager.repo.UserRepository;
@@ -39,6 +41,7 @@ public class ReservationController {
     private final ReservationRepository reservationRepository;
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
+    private final ReceiptRepository receiptRepository;
 
 
     @GetMapping
@@ -123,16 +126,6 @@ public class ReservationController {
         reservation.setStatus(ReservationStatus.DONE);
         reservationRepository.save(reservation);
 
-        Room room = reservation.getRoom();
-        if (room.isFree()) {
-            room.setFree(false);
-            roomRepository.save(room);
-        } else {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new ErrorResponse(true, "Номер уже занят. Подтверждение бронирования невозможно."));
-        }
-
         return ResponseEntity.ok(convertToDTO(reservation));
     }
 
@@ -161,6 +154,12 @@ public class ReservationController {
 
         reservation.setStatus(ReservationStatus.REJECT);
         reservationRepository.save(reservation);
+
+        Receipt receipt = receiptRepository.findByReservationId(reservation.getId())
+                .orElseThrow(() -> new RuntimeException("Чек не найден"));
+
+        receipt.setStatus("Cancelled");
+        receiptRepository.save(receipt);
 
         return ResponseEntity.ok(convertToDTO(reservation));
     }
@@ -235,6 +234,10 @@ public class ReservationController {
                 dto.setRoomPhoto("http://localhost:8080/img/hotel/" + room.getPhoto());
             }
         }
+
+        Receipt receipt = receiptRepository.findByReservationId(reservation.getId())
+                .orElseThrow(() -> new RuntimeException("Чек не найден"));
+        dto.setReceiptStatus(receipt.getStatus());
 
         return dto;
     }
