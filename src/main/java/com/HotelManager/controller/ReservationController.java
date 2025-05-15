@@ -177,9 +177,6 @@ public class ReservationController {
             roomRepository.save(room);
         }
 
-        receiptRepository.deleteByReservationId(id);
-        reservationRepository.deleteById(id);
-
         return ResponseEntity.ok("Выселение успешно");
     }
 
