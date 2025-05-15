@@ -136,7 +136,7 @@ public class ReservationController {
         User user = userRepository.findByUsername(reservation.getOwner())
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
 
-        int totalCost = reservation.getPrice() * reservation.getDays();
+        int totalCost = reservation.getPrice();
         user.setBalance(user.getBalance() + totalCost);
         userRepository.save(user);
 
@@ -150,6 +150,37 @@ public class ReservationController {
         reservationRepository.deleteById(id);
 
         return ResponseEntity.ok("Бронь удалена");
+    }
+
+
+    @PreAuthorize("hasAnyRole('USER')")
+    @PostMapping("/{id}/moveOut") // http://localhost:8080/reservation/1/cancel
+    @Transactional
+    public ResponseEntity<?> moveOut(@PathVariable Long id) {
+        String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Бронирование не найдено"));
+
+        if (!reservation.getOwner().equals(currentUser)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Ошибка выселения");
+        }
+
+        User user = userRepository.findByUsername(reservation.getOwner())
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+
+        userRepository.save(user);
+
+        Room room = reservation.getRoom();
+        if (room != null && !room.isFree()) {
+            room.setFree(true);
+            roomRepository.save(room);
+        }
+
+        receiptRepository.deleteByReservationId(id);
+        reservationRepository.deleteById(id);
+
+        return ResponseEntity.ok("Выселение успешно");
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
