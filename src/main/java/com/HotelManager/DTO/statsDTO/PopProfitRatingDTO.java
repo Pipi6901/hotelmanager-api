@@ -1,11 +1,11 @@
-package com.HotelManager.DTO;
+package com.HotelManager.DTO.statsDTO;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class StatsDTO {
+public class PopProfitRatingDTO {
     private int totalIncome;
     private List<RoomStatsDTO> topRoomsByIncome;
     private List<RoomStatsDTO> topRoomsByBookings;
